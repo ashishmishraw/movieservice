@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Rest endpoint implementation for movie recommendation service
@@ -40,7 +41,7 @@ public class MovieRecommendationService extends ServiceBase {
             InputValidator.validateInputs(userId, text);
             URLDecoder.decode(text, "UTF-8");
 
-            List<String> movies = DataSetRepository.getInstance().findMovies(userId, text);
+            Set<String> movies = DataSetRepository.getInstance().findMovies(userId, text);
 
             if (null != movies && !movies.isEmpty()) {
                 return Response.ok(new Gson().toJson(movies), MediaType.APPLICATION_JSON).build();

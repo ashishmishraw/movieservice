@@ -7,6 +7,7 @@ import in.geektrust.movieservice.model.Movie;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.PropertyDescriptor;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,10 +55,9 @@ public class DataSetRepository {
 
         String fileName = "/movie_metadata.csv";
         FileReader fileReader = null;
-        URL resource = DataSetRepository.class.getResource(fileName);
 
         try {
-            fileReader = new FileReader(resource.getFile());
+            fileReader = new FileReader(new File(".").getAbsolutePath() + "/src/main/resources/" + fileName);
             CSVReader csvReader = new CSVReader(fileReader);
             CsvToBean<Movie> csv = new CsvToBean() {
                 protected Object convertValue(String value, PropertyDescriptor prop) throws InstantiationException, IllegalAccessException {
@@ -95,20 +95,31 @@ public class DataSetRepository {
      * @param text
      * @return List of {@link Movie}s
      */
-    public List<String> findMovies(String userId, String text) {
+    public Set<String> findMovies(String userId, String text) {
 
         UserPreferences.Preference preferences = UserPreferences.getUserPreferences(userId);
 
-        List<String> filteredMovies1 = findBasedOnPreferences(text, preferences);
-        List<String> filteredMovies = findBasedOnText(text);
+        List<String> filteredMovies = findBasedOnPreferences(text, preferences);
+        //List<String> filteredMovies1 = findBasedOnText(text);
 
+        if(filteredMovies != null && filteredMovies.size() > 0) {
+            filteredMovies.addAll(findBasedOnText(text));
+        } else {
+            filteredMovies = findBasedOnText(text);
+        }
+
+        HashSet<String> movies = new HashSet<>();
+        movies.addAll(filteredMovies);
+
+        /*
         if(filteredMovies1 != null && filteredMovies1.size() > 0) {
             filteredMovies1.addAll(filteredMovies);
             return filteredMovies1;
         } else {
             System.out.println("preferences based movies not found for user " + userId);
         }
-        return filteredMovies;
+        return filteredMovies; */
+        return movies;
     }
 
 

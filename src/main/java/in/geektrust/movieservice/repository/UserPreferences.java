@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -31,13 +32,12 @@ public class UserPreferences {
     static { //initializer
 
         String fileName = "/user_preferences.json";
-        URL resource = UserPreferences.class.getResource(fileName);
 
         try { //(Stream<String> lines = Files.lines(Paths.get(resource.toURI()))) {
 
             Gson gson = new Gson();
-            JsonReader reader = new JsonReader(new FileReader(resource.getFile()));
-            reader.setLenient(true);
+            JsonReader reader = new JsonReader(new FileReader(new File(".").getAbsolutePath() + "/src/main/resources/" + fileName));
+	    reader.setLenient(true);
             JsonObject[] elements  = gson.fromJson(reader, new TypeToken<JsonObject[]>() {}.getType());
 
             Stream.of(elements).forEach(e -> setDataInMap(e, gson));

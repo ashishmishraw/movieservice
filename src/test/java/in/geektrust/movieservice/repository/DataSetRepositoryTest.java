@@ -1,6 +1,6 @@
 package in.geektrust.movieservice.repository;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mishra.ashish@icloud.com
@@ -19,7 +19,7 @@ public class DataSetRepositoryTest {
     public void dataTest() throws Exception {
 
         DataSetRepository.getInstance().init();
-        List<String> movies = DataSetRepository.getInstance().findMovies("105", "Tom Hanks");
+        Set<String> movies = DataSetRepository.getInstance().findMovies("105", "Tom Hanks");
         System.out.println(movies.size() + " movies : " + movies);
         movies = DataSetRepository.getInstance().findMovies("102", "Johnny Depp");
         System.out.println(movies.size() + " movies : " +  movies);
